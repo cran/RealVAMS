@@ -1,0 +1,11 @@
+useDynLib(RealVAMS)
+export(RealVAMS)
+
+
+# Imported functions
+import(Matrix)
+importFrom(numDeriv,jacobian)
+import(Rcpp)
+
+
+
