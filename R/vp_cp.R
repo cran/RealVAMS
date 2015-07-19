@@ -781,7 +781,7 @@ for (PQL.it in 1:control$max.PQL.it) {
                   alpha.parm <- alpha[!((1:nalpha) %in% alpha.diag)]
                   alpha.parm.old <- alpha.parm
                   s.prev <- numeric(length(alpha.parm))
-                  #save(list = ls(all = TRUE), file = "test.RData",envir=environment())
+                  
                   # one step is sufficient because score function is linear in alpha
                   s <- alpha.score(alpha.parm, alpha = alpha, temp_mat_R = temp_mat_R[seq(1, n_eta, 2), seq(1, n_eta, 2)], nalpha = nalpha, alpha.diag = alpha.diag, P = P, R_inv = R.full.inv[J.mat$response ==
                     "score", J.mat$response == "score"], eta.hat = eta.hat[seq(1, n_eta, 2)], ybetas = ybetas, X = J.X[J.mat$response == "score", ], Y = J.Y[J.mat$response == "score"])
@@ -817,7 +817,7 @@ for (PQL.it in 1:control$max.PQL.it) {
                 if(control$school.effects){
                 Gn <- bdiag(Gn,suppressMessages(kronecker(Diagonal(nschool_effects), gt.school/nschool_effects)))
                 }
-#    save(list = ls(all = TRUE),file="pattern.sum.RData",envir=environment())
+
              
                 pattern.sum <- list()
 for (p in unique(J.mat$pat)) {

@@ -158,10 +158,11 @@ data(example.score.data)
 data(example.outcome.data)
 #The next line exists to show that the function can run and that the package
 #installed correctly
-res.test<-RealVAMS(example.score.data,example.outcome.data,max.PQL.it=1,max.iter.EM=2,
+RealVAMS(example.score.data,example.outcome.data,max.PQL.it=1,max.iter.EM=2,
 var.parm.hessian=FALSE)
-#The next line (not run automatically) provides a full example of the function
-\dontrun{res<-RealVAMS(example.score.data,example.outcome.data)}
+
+\donttest{
+res<-RealVAMS(example.score.data,example.outcome.data)}
 }
 \keyword{regression}
 

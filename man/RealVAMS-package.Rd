@@ -13,8 +13,8 @@ The RealVAMs package fits a multivariate value-added model (VAM) (see Broatch an
 \tabular{ll}{
 Package: \tab RealVAMS\cr
 Type: \tab Package\cr
-Version: \tab 0.3-1\cr
-Date: \tab 2014-09-25\cr
+Version: \tab 0.3-2\cr
+Date: \tab 2015-07-19\cr
 License: \tab GPL-2\cr
 }
 }
@@ -45,8 +45,9 @@ data(example.score.data)
 data(example.outcome.data)
 #The next line exists to show that the function can run and that the package
 #installed correctly
-res.test<-RealVAMS(example.score.data,example.outcome.data,max.PQL.it=1,max.iter.EM=2,
+RealVAMS(example.score.data,example.outcome.data,max.PQL.it=1,max.iter.EM=2,
 var.parm.hessian=FALSE)
-#The next line (not run automatically) provides a full example of the function
-\dontrun{res<-RealVAMS(example.score.data,example.outcome.data)}
+
+\donttest{
+res<-RealVAMS(example.score.data,example.outcome.data)}
 }

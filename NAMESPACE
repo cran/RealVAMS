@@ -4,8 +4,11 @@ export(RealVAMS)
 
 # Imported functions
 import(Matrix)
-importFrom(numDeriv,jacobian)
+importFrom("numDeriv","jacobian")
 import(Rcpp)
+importFrom("methods", "as")
+importFrom("stats", "binomial","formula", "glm.fit", "na.fail", "var")
+importFrom("utils", "flush.console")
 
 
 
