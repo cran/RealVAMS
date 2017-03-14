@@ -8,8 +8,8 @@ Internal function
 An internal function
 }
 \usage{
-R_mstep2(invsqrtW_,JYp_,loopsize_, patternlength_,rownumber_,ybetas_,etahat_,tempmatR_,
-JXpi_,JXpp_,JXpx_,JXpdim_,JZpi_,JZpp_,JZpx_,JZpdim_)
+R_mstep2(invsqrtW_,JYp_,loopsize_, patternlength_,rownumber_,ybetas_,etahat_,
+tempmatR_,JXpi_,JXpp_,JXpx_,JXpdim_,JZpi_,JZpp_,JZpx_,JZpdim_)
 }
 \arguments{
   \item{invsqrtW_}{

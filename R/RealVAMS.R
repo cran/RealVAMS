@@ -57,9 +57,12 @@ for (j in 1:nyear.score) {
     }
 
 
-    res<-c(res,list(key=key))
+  
+
+#  res<-c(res,list(key=key))
 #    res$teach.effects$teacher_year<-key[match(res$teach.effects$teacher_year,key[,2]),1]
 #    res$teach.effects$effect_year<-key[match(res$teach.effects$effect_year,key[,2]),1]
+    res$outcome.family<-control$outcome.family
     class(res) <- "RealVAMS"
     return(res)
 

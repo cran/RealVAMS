@@ -1,3 +1,9 @@
+Version 0.3-3: 2017-03-02
+        - Add generic summary, plot, and print functions.
+	- Added detail to documentation for the RealVAMS function
+	- Reformatted user manual documentation for simulated data
+	- Renamed some of the elements of the RealVAMS class
+
 Version 0.3-2: 2015-07-19
         - Minor updates to package structure to match new CRAN requirements.
 

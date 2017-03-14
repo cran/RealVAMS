@@ -490,18 +490,18 @@ temp_Z_mat <- temp_Z_mat[temp_Z_mat$student %in% B.mat$student, ]
 #2.2 changed 1 to "student" below
 temp_Z_mat <- temp_Z_mat[, "student", drop = FALSE]
 B.Z <- temp_Z
-colnames(B.Z) <- paste(colnames(temp_Z), "_B", sep = "")
+colnames(B.Z) <- paste(colnames(temp_Z), "_outcome", sep = "")
 #bznames<-colnames(B.Z)
 #if(control$school.effects){ 
 #bz.school<-t(fac2sparse(B.mat$schoolID))
 #nschool_effects<-ncol(bz.school)
 #B.Z<-cBind(B.Z,bz.school)
-#colnames(B.Z)<-c(paste(t_effects, "_B", sep = ""),paste(colnames(bz.school),"_B",sep=""))
+#colnames(B.Z)<-c(paste(t_effects, "_outcome", sep = ""),paste(colnames(bz.school),"_outcome",sep=""))
 #}
 B.mat <- merge(temp_Z_mat, B.mat, by = "student", sort = FALSE)
-B.mat$response <- "B"
+B.mat$response <- "outcome"
 Z_mat$response <- "score"
-B.mat.full$response <- "B"
+B.mat.full$response <- "outcome"
 Z_mat.full$response <- "score"
 J.mat <- J.mat.original <- rbind(Z_mat[, c("student", "year", "mis", "y", "response")], B.mat[, c("student", "year", "mis", "y", "response")])
 J.mat.full <- J.mat.full.original <- rbind(Z_mat.full[, c("student", "year", "mis", "y", "response")], B.mat.full[, c("student", "year", "mis", "y", "response")])
@@ -523,7 +523,7 @@ if (rankMatrix(B_X_mat,method = 'qrLINPACK')[1] != dim(B_X_mat)[2]) {
     if (substr(ANSWER, 1, 1) == "n"|substr(ANSWER, 1, 1) == "N") stop("WARNING: Fixed-effects design matrix not full-rank")
 }
 J.X <- bdiag(X_mat, B_X_mat)
-colnames(J.X) <- c(paste(colnames(X_mat), "_score", sep = ""), paste(colnames(B_X_mat), "_b", sep = ""))
+colnames(J.X) <- c(paste(colnames(X_mat), "_score", sep = ""), paste(colnames(B_X_mat), "_outcome", sep = ""))
 if(!control$school.effects){
 Z.expand <- Matrix(0, nrow(Z_mat), 2 * nteach_effects)
 Z.expand[, seq(1, 2 * nteach_effects, by = 2)] <- Z
@@ -644,11 +644,11 @@ if (control$REML) {
     cons.logLik <- 0.5 * (n_eta) * log(2 * pi)
 }
   J.mat$fit <- J.mat$mu <- J.mat$mu.eta.val <- J.mat$nu <- J.mat$sqrt.w <- NA
-    J.mat[J.mat$response == "B", ]$fit <- as.vector(J.X[J.mat$response == "B", ] %*% ybetas + J.Z[J.mat$response == "B", ] %*% eta.hat)
-    J.mat[J.mat$response == "B", ]$mu <- as.vector(fam.binom$linkinv(J.mat[J.mat$response == "B", ]$fit))
-    J.mat[J.mat$response == "B", ]$mu.eta.val <- fam.binom$mu.eta(J.mat[J.mat$response == "B", ]$fit)
-    J.mat[J.mat$response == "B", ]$nu <- as.vector(J.mat[J.mat$response == "B", ]$fit) + (J.mat[J.mat$response == "B", ]$y - J.mat[J.mat$response == "B", ]$mu)/J.mat[J.mat$response == "B", ]$mu.eta.val
-    J.mat[J.mat$response == "B", ]$sqrt.w <- sqrt(fam.binom$variance(J.mat[J.mat$response == "B", ]$mu)/J.mat[J.mat$response == "B", ]$mu.eta.val^2)
+    J.mat[J.mat$response == "outcome", ]$fit <- as.vector(J.X[J.mat$response == "outcome", ] %*% ybetas + J.Z[J.mat$response == "outcome", ] %*% eta.hat)
+    J.mat[J.mat$response == "outcome", ]$mu <- as.vector(fam.binom$linkinv(J.mat[J.mat$response == "outcome", ]$fit))
+    J.mat[J.mat$response == "outcome", ]$mu.eta.val <- fam.binom$mu.eta(J.mat[J.mat$response == "outcome", ]$fit)
+    J.mat[J.mat$response == "outcome", ]$nu <- as.vector(J.mat[J.mat$response == "outcome", ]$fit) + (J.mat[J.mat$response == "outcome", ]$y - J.mat[J.mat$response == "outcome", ]$mu)/J.mat[J.mat$response == "outcome", ]$mu.eta.val
+    J.mat[J.mat$response == "outcome", ]$sqrt.w <- sqrt(fam.binom$variance(J.mat[J.mat$response == "outcome", ]$mu)/J.mat[J.mat$response == "outcome", ]$mu.eta.val^2)
     J.mat[J.mat$response == "score", ]$sqrt.w <- 1
     J.mat[J.mat$response == "score", ]$nu <- J.mat[J.mat$response == "score", ]$y
     sqrt.W <- Diagonal(x = J.mat$sqrt.w)
@@ -735,7 +735,7 @@ for (PQL.it in 1:control$max.PQL.it) {
                         flush.console()
                       }
                       cat("\n")
-                  cat("alphas:\n")
+                  cat("alphas (persistence parameters):\n")
                   print(round(alpha, 4))
                       rm(j)
                     }
@@ -772,7 +772,7 @@ for (PQL.it in 1:control$max.PQL.it) {
                         flush.console()
                       }
                   cat("\n")
-                  cat("alphas:\n")
+                  cat("alphas (persistence parameters):\n")
                   print(round(alpha, 4))
                   rm(j)
                 }
@@ -1064,11 +1064,11 @@ rinv<-bdiag(rinv,chol2inv(chol(R_i[inv.indx,inv.indx])))
     ybetas.pql.old <- ybetas
     parms.old <- c(ybetas.pql.old, thetas.pql.old)
     # we use inverse of Wolfinger's W this part of the code transforms the responses (pseudo-likelihood approach) most of this code was taken from the R function glmmPQL
-    J.mat[J.mat$response == "B", ]$fit <- as.vector(J.X[J.mat$response == "B", ] %*% ybetas + J.Z[J.mat$response == "B", ] %*% eta.hat)
-    J.mat[J.mat$response == "B", ]$mu <- as.vector(fam.binom$linkinv(J.mat[J.mat$response == "B", ]$fit))
-    J.mat[J.mat$response == "B", ]$mu.eta.val <- fam.binom$mu.eta(J.mat[J.mat$response == "B", ]$fit)
-    J.mat[J.mat$response == "B", ]$nu <- as.vector(J.mat[J.mat$response == "B", ]$fit) + (J.mat[J.mat$response == "B", ]$y - J.mat[J.mat$response == "B", ]$mu)/J.mat[J.mat$response == "B", ]$mu.eta.val
-    J.mat[J.mat$response == "B", ]$sqrt.w <- sqrt(fam.binom$variance(J.mat[J.mat$response == "B", ]$mu)/J.mat[J.mat$response == "B", ]$mu.eta.val^2)
+    J.mat[J.mat$response == "outcome", ]$fit <- as.vector(J.X[J.mat$response == "outcome", ] %*% ybetas + J.Z[J.mat$response == "outcome", ] %*% eta.hat)
+    J.mat[J.mat$response == "outcome", ]$mu <- as.vector(fam.binom$linkinv(J.mat[J.mat$response == "outcome", ]$fit))
+    J.mat[J.mat$response == "outcome", ]$mu.eta.val <- fam.binom$mu.eta(J.mat[J.mat$response == "outcome", ]$fit)
+    J.mat[J.mat$response == "outcome", ]$nu <- as.vector(J.mat[J.mat$response == "outcome", ]$fit) + (J.mat[J.mat$response == "outcome", ]$y - J.mat[J.mat$response == "outcome", ]$mu)/J.mat[J.mat$response == "outcome", ]$mu.eta.val
+    J.mat[J.mat$response == "outcome", ]$sqrt.w <- sqrt(fam.binom$variance(J.mat[J.mat$response == "outcome", ]$mu)/J.mat[J.mat$response == "outcome", ]$mu.eta.val^2)
     J.mat[J.mat$response == "score", ]$sqrt.w <- 1
     J.mat[J.mat$response == "score", ]$nu <- J.mat[J.mat$response == "score", ]$y
     sqrt.W <- Diagonal(x = J.mat$sqrt.w)
@@ -1140,14 +1140,16 @@ colnames(eblup) <- c("effect", "EBLUP", "std_error")
 t_lab <- as.vector(NULL)
 r_lab <- as.vector(NULL)
 for (j in 1:nyear.score) {
-    ne <- (Kg[j] * (Kg[j] + 1))/2
-    y <- c(NULL)
-    x <- c(NULL)
-    for (k in 1:Kg[j]) {
-        x <- c(x, k:Kg[j])
-        y <- c(y, rep(k, (Kg[j] - k + 1)))
-    }
-    t_lab <- c(t_lab, paste("teacher effect from year", rep(j, ne), sep = ""))
+#    ne <- (Kg[j] * (Kg[j] + 1))/2
+#    y <- c(NULL)
+#    x <- c(NULL)
+#    for (k in 1:Kg[j]) {
+#        x <- c(x, k:Kg[j])
+#        y <- c(y, rep(k, (Kg[j] - k + 1)))
+#    }
+    t_lab <- c(t_lab, paste("teacher effect from year", j," [1,1] (score variance)",sep = ""))
+    t_lab <- c(t_lab, paste("teacher effect from year", j," [2,1] (score-outcome covariance)",sep = ""))
+    t_lab <- c(t_lab, paste("teacher effect from year", j," [2,2] (outcome variance)",sep = ""))
 }
 if(control$school.effects){
 t_lab<-c(t_lab,rep("School Effect",3))
@@ -1159,7 +1161,7 @@ for (k in 1:nyear.pseudo) {
     y <- c(y, rep(k, (nyear.pseudo - k + 1)))
 }
 r_lab <- paste("error covariance", ":[", x, ",", y, "]", sep = "")
-rm(j, ne)
+#rm(j, ne)
 alpha.label <- c(NULL)
 for (i in 1:(nyear.score - 1)) {
     for (j in (i + 1):(nyear.score)) {
@@ -1187,10 +1189,19 @@ mresid <- as.numeric(J.Y - J.X %*% ybetas)
 cresid <- as.numeric(mresid - J.Z %*% eta.hat)
 yhat <- as.numeric(J.X %*% ybetas + J.Z %*% eta.hat)
 yhat.m <- as.numeric(J.X %*% ybetas)
+#rchol <- try(chol(R.full.inv))
+#yhat.s <- try(as.vector(rchol %*% (yhat)))
+#sresid <- try(as.vector(rchol %*% J.Y - yhat.s))
+#print(system.time(
+#Vchol<-chol(J.Z%*%G%*%t(J.Z)+R.full)))
+#print(system.time(
+#sresid<-solve(Vchol,J.Y-res$yhat)
+#))
+
 gam_t <- list()
 for (i in 1:nyear.score) {
     gam_t[[i]] <- as.matrix(ltriangle(reduce.G(G, nyear.score = nyear.score, nteacher = nteacher)[(1+3*(i-1)):(3*i)]))
-    colnames(gam_t[[i]]) <- c(paste("year", i, sep = ""),"")
+    colnames(gam_t[[i]])<-rownames(gam_t[[i]]) <- c("score","outcome")
 }
 persistence_parameters = ltriangle(alpha)
 persistence_parameters[upper.tri(persistence_parameters)]<-NA
@@ -1200,9 +1211,21 @@ school.subset<-NULL
 school.subset<-eblup[(2*nteach_effects+1):n_eta,]
 }
 teach.cov <- lapply(gam_t, function(x) round(x, 4))
-res <- list(loglik = lgLik, teach.effects = eblup[1:(2*nteach_effects),],school.effects=school.subset, parameters = parameters, Hessian = Hessian, R_i = as.matrix(R_i), teach.cov = gam_t, mresid = mresid, cresid = cresid, y = J.Y, yhat = yhat, 
+names(J.mat)[names(J.mat)=="y"] <- "y.combined.original"
+R_i <- as.matrix(R_i)
+rownames(R_i)<-colnames(R_i)<-c(paste("year",1:(ncol(R_i)-1),"score",sep="_"),"outcome")
+parameters<-cbind(parameters,z=round(parameters[,1]/parameters[,2],2))
+parameters[,3][grepl("variance",rownames(parameters))&!grepl("covariance",rownames(parameters))]<-NA
+parameters<-cbind(parameters,pvalue=round( 2*(1-pnorm(abs(parameters[,3]))),3))
+parameters<-cbind(parameters,lower.95.CI=round( parameters[,1]-parameters[,2]*qnorm(.975),3))
+parameters<-cbind(parameters,upper.95.CI=round( parameters[,1]+parameters[,2]*qnorm(.975),3))
+parameters[,5:6][grepl("variance",rownames(parameters))&!grepl("covariance",rownames(parameters))]<-NA
+
+res <- list(loglik = lgLik, teach.effects = eblup[1:(2*nteach_effects),],school.effects=school.subset, parameters = parameters, Hessian = Hessian, R_i = R_i, teach.cov = gam_t, mresid = mresid, 
+            cresid = cresid,y.combined = J.Y, y.combined.hat = yhat, y.response.type=J.mat$response,y.year=J.mat$year,
     num.obs = Ny, num.student = nstudent, num.year = nyear.score, num.teach = nteacher,   persistence = control$persistence, persistence_parameters =  persistence_parameters,X=J.X,Z=J.Z,
-    G=G,R=R, R.full=R.full,sqrt.W=J.mat$sqrt.w)
+    G=G,R=R, R.full=R.full,sqrt.W=J.mat$sqrt.w,eblup=eblup,fixed.effects=ybetas,joined.table=J.mat)
+try(res$teach.effects$teacher_year<-as.numeric(substr(gsub(".*year","",res$teach.effects[,1]),1,1)))
 # res$teach.effects$teacher_year <- key[match(res$teach.effects$teacher_year, key[, 2]), 1] res$teach.effects$effect_year <- key[match(res$teach.effects$effect_year, key[, 2]), 1]
 class(res) <- "RealVAMS"
 cat("Total Time: ", proc.time()[3] - ptm.total, " seconds\n")
