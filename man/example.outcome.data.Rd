@@ -59,10 +59,8 @@ year<-c(rep(1:3,each=students*teachers))
 y<-c(y1,y2,y3)
 vam_data2<-as.data.frame(cbind(student,teacher,year,y,cont_var))
 vam_data2<-vam_data2[order(vam_data2$student,vam_data2$year),]
- vam_data2<-vam_data2[-6,]
 example.score.data<-vam_data2
 vam_data2.r<-as.data.frame(cbind(student,r=r1))
-vam_data2.r<-vam_data2.r[-1,] 
 example.outcome.data<-vam_data2.r
 }
 }

@@ -21,7 +21,7 @@ A simulated data set used to illustrate the functionality of the package. The da
 \details{
 The data set may be reproduced with the following code.
 \preformatted{
-set.seed(0)                                                                                                                                                         
+set.seed(0)                                                                                                                                                 
 library(MASS)
 #number of years: fixed at 3 for this code block
 years<-3   
@@ -62,10 +62,8 @@ year<-c(rep(1:3,each=students*teachers))
 y<-c(y1,y2,y3)
 vam_data2<-as.data.frame(cbind(student,teacher,year,y,cont_var))
 vam_data2<-vam_data2[order(vam_data2$student,vam_data2$year),]
- vam_data2<-vam_data2[-6,]
 example.score.data<-vam_data2
 vam_data2.r<-as.data.frame(cbind(student,r=r1))
-vam_data2.r<-vam_data2.r[-1,] 
 example.outcome.data<-vam_data2.r
 }
 }

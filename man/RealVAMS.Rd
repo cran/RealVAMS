@@ -5,14 +5,15 @@
 Multivariate VAM Fitting
 }
 \description{
-Fits a multivariate value-added model (VAM), see Broatch and Lohr (2012) <doi:10.3102/1076998610396900>, with normally distributed test scores and a binary outcome indicator. A pseudo-likelihood approach, Wolfinger (1993) <doi:10.1080/00949659308811554>, is used for the estimation of this joint generalized linear mixed model.  This material is based upon work supported by the National Science Foundation under grants DRL-1336027 and DRL-1336265.  
+Fits a multivariate value-added model (VAM), see Broatch and Lohr (2012) \cr <doi:10.3102/1076998610396900>, with normally distributed test scores and a binary outcome indicator. A pseudo-likelihood approach, Wolfinger and O'Connell (1993) \cr <doi:10.1080/00949659308811554>, is used for the estimation of this joint generalized linear mixed model.  The inner loop of the pseudo-likelihood routine (estimation of a linear mixed model) occurs in the framework of the EM algorithm presented by \cr Karl, Yang, and Lohr (2013) <DOI:10.1016/j.csda.2012.10.004>. This material is based upon work supported by the National Science Foundation under grants DRL-1336027 and DRL-1336265.  
 }
 \usage{
 RealVAMS(score.data, outcome.data, persistence = "CP",school.effects = FALSE, 
 REML = TRUE, score.fixed.effects = formula(~as.factor(year) + 0), 
 outcome.fixed.effects = formula(~1), max.iter.EM = 10,
 outcome.family = binomial(link = "probit"), tol1 = 1e-07, max.PQL.it = 30, 
-pconv = .Machine$double.eps*1e9, var.parm.hessian = TRUE, verbose = TRUE)
+pconv = .Machine$double.eps*1e9, var.parm.hessian = TRUE, verbose = TRUE,
+independent.responses = FALSE,cpp.benchmark=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -71,6 +72,17 @@ run time of the program: only standard errors for the fixed effects will be retu
   \item{verbose}{
 logical. If TRUE, model information will be printed at each iteration.
 }
+\item{independent.responses}{
+logical. If TRUE, this option will model the responses independently by fixing the covariances in G at 0 as well as the 
+covariances in the last row/column of R. The resulting estimates are the same as those that would be obtained by modelling 
+the test scores in package GPvam (with REML=FALSE) and modelling the binary respones in SAS GLIMMIX (with link=probit) 
+RealVAMS has been validated against these programs.
+}                                                  
+\item{cpp.benchmark}{
+logical. If TRUE, this option will perform the calculations shown in equation (16) of 
+Karl, Yang, Lohr (2013) using both R and the embedded C++ code to demonstrate the time savings of using C++. 
+A summary table is printed at the end.
+}
 }
 \details{
 
@@ -127,7 +139,7 @@ the original response can be obtained from \cr\code{joined.table$y.combined.orig
 \references{
 Broatch, J. and Lohr, S. (2012) <DOI:10.3102/1076998610396900> Multidimensional Assessment of Value Added by Teachers to Real-World Outcomes. \emph{Journal of Educational and Behavioral Statistics} \bold{37}, 256--277.
 
-Karl, A., Yang, Y. and Lohr, S. (2012) <DOI:10.1016/j.csda.2012.10.004> Efficient Maximum Likelihood Estimation of Multiple Membership Linear Mixed Models, with an Application to Educational Value-Added Assessments. \emph{Computational Statistics & Data Analysis} \bold{59}, 13--27.  
+Karl, A., Yang, Y. and Lohr, S. (2013) <DOI:10.1016/j.csda.2012.10.004> Efficient Maximum Likelihood Estimation of Multiple Membership Linear Mixed Models, with an Application to Educational Value-Added Assessments. \emph{Computational Statistics & Data Analysis} \bold{59}, 13--27.  
 
 Karl, A., Yang, Y. and Lohr, S. (2013) <DOI:10.3102/1076998613494819> A Correlated Random Effects Model for Nonignorable Missing Data in Value-Added Assessment of Teacher Effects. \emph{Journal of Educational and Behavioral Statistics} \bold{38}, 577--603.
 
