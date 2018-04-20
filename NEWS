@@ -1,3 +1,6 @@
+Version 0.4-1: 2018-04-20
+	- Internal changes to accommodate changes in Matrix package
+
 Version 0.4-0: 2017-08-13
         - New arguments added to the RealVAMS function
 	-- independent.responses defaults to FALSE. If TRUE,

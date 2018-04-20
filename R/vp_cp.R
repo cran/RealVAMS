@@ -80,9 +80,9 @@ vp_cp <- function(Z_mat, B.mat, control) {
         H.inv <- chol2inv(chol.H)
         if (control$REML) {
             c.temp <- crossprod(X, R.full.inv) %*% Z
-            c.1 <- rBind(crossprod(X, R.full.inv) %*% X, t(c.temp))
-            c.2 <- rBind(c.temp, H)
-            C_inv <- cBind(c.1, c.2)
+            c.1 <- rbind(crossprod(X, R.full.inv) %*% X, t(c.temp))
+            c.2 <- rbind(c.temp, H)
+            C_inv <- cbind(c.1, c.2)
             chol.C_inv <- chol(forceSymmetric(symmpart(C_inv)))
             cs <- chol2inv(chol.C_inv)
             C.mat <- cs[-c(1:n_ybeta), -c(1:n_ybeta)]
@@ -155,7 +155,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
                 Z.expand[, seq(1, 2 * nteach_effects + 2 * nschool_effects, by = 2)] <- Z
             }
             colnames(Z) <- eta_effects
-            J.Z <- rBind(Z.expand, B.Z.expand)
+            J.Z <- rbind(Z.expand, B.Z.expand)
             J.Z <- J.Z[order(J.mat.original$student, J.mat.original$year), ]
             colnames(J.Z) <- interleave(colnames(Z), colnames(B.Z))
             for (p in unique(J.mat$pat)) {
@@ -474,7 +474,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
             temp.exp$student <- mis_stu
             temp.exp$teacher <- rep(NA, le)
             temp.exp$y <- rep(NA, le)
-            Z_mat <- rBind(Z_mat, temp.exp)
+            Z_mat <- rbind(Z_mat, temp.exp)
         }
     }
     rm(g, le)
@@ -496,7 +496,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
         temp.exp$mis <- rep(1, le)
         temp.exp$student <- mis_stu
         temp.exp$y <- rep(NA, le)
-        B.mat <- rBind(B.mat, temp.exp)
+        B.mat <- rbind(B.mat, temp.exp)
     }
     rm(le)
     B.mat.full <- B.mat
@@ -513,9 +513,9 @@ vp_cp <- function(Z_mat, B.mat, control) {
     #if a teacher teaches multiple years in the data set, those are treated
     #as different effects and count as different "teachers"
     if (length(na_list) > 0) {
-        teachyearcomb <- unique(cBind(Z_mat[-na_list, ]$year, Z_mat[-na_list, ]$teacher))
+        teachyearcomb <- unique(cbind(Z_mat[-na_list, ]$year, Z_mat[-na_list, ]$teacher))
     } else {
-        teachyearcomb <- unique(cBind(Z_mat$year, Z_mat$teacher))
+        teachyearcomb <- unique(cbind(Z_mat$year, Z_mat$teacher))
     }
     Z_mat <- Z_mat[order(Z_mat$student, Z_mat$year, Z_mat$teacher), , drop = FALSE]
     Z_mat.full <- Z_mat.full[order(Z_mat.full$student, Z_mat.full$year, Z_mat.full$teacher), 
@@ -556,7 +556,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
             1] & Z_mat.full$teacher == teachyearcomb[k, 2]]
         # t_effects[k] <- paste(teachyearcomb[k, 1], '_', teachyearcomb[k, 2], sep = '')
         t_effects[k] <- paste(teachyearcomb[k, 2], sep = "")
-        eblup.tracker <- rBind(eblup.tracker, c(teachyearcomb[k, ], teachyearcomb[k, 
+        eblup.tracker <- rbind(eblup.tracker, c(teachyearcomb[k, ], teachyearcomb[k, 
             1]))
         for (yr in as.numeric(teachyearcomb[k, 1]):nyear.score) {
             if (sum(is.element(Z_mat$student, student_subset) & Z_mat$year == yr) != 
@@ -576,7 +576,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
         school.start <- nteach_effects + 1
         z.school <- t(fac2sparse(Z_mat$schoolID))
         # school.length<-ncol(z.school)
-        Z.school.only <- cBind(Matrix(0, nrow(Z_mat), nteach_effects), z.school)
+        Z.school.only <- cbind(Matrix(0, nrow(Z_mat), nteach_effects), z.school)
         nschool_effects <- ncol(z.school)
     }
     #P holds indicator matrices (built from dP) to show which persistence
@@ -588,7 +588,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
             P[[i]][[j]] <- as(sparseMatrix(i = dP[[i]][[j]][, 1], j = dP[[i]][[j]][, 
                 2], dims = c(nrow(Z_mat), nteach_effects)), "dgCMatrix")
             if (control$school.effects) 
-                P[[i]][[j]] <- cBind(P[[i]][[j]], Matrix(0, nrow(Z_mat), nschool_effects))
+                P[[i]][[j]] <- cbind(P[[i]][[j]], Matrix(0, nrow(Z_mat), nschool_effects))
         }
     }
     if (!control$school.effects) {
@@ -682,7 +682,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
     }
     #J.Z will be the master Z matrix going forward. We are modelling
     #J.Y = J.X * ybetas + J.Z * eta.hat
-    J.Z <- rBind(Z.expand, B.Z.expand)
+    J.Z <- rbind(Z.expand, B.Z.expand)
     J.Z <- J.Z[order(J.mat$student, J.mat$year), ]
     J.X <- J.X[order(J.mat$student, J.mat$year), ]
     interleave <- function(v1, v2) {
@@ -1240,7 +1240,7 @@ for (p in unique(J.mat$pat)) {
                   colnames(Z) <- eta_effects
                   # B.Z.expand <- Matrix(0, nrow(B.mat), 2 * nteach_effects) B.Z.expand[, seq(2, 2
                   # * nteach_effects, by = 2)] <- B.Z
-                  J.Z <- rBind(Z.expand, B.Z.expand)
+                  J.Z <- rbind(Z.expand, B.Z.expand)
                   J.Z <- J.Z[order(J.mat.original$student, J.mat.original$year), 
                     ]
                   colnames(J.Z) <- interleave(colnames(Z), colnames(B.Z))
@@ -1353,7 +1353,7 @@ for (p in unique(J.mat$pat)) {
 #                    Z.expand[, seq(1, 2 * nteach_effects + 2 * nschool_effects, by = 2)] <- Z
 #                  }
 #                  colnames(Z) <- eta_effects
-#                  J.Z <- rBind(Z.expand, B.Z.expand)
+#                  J.Z <- rbind(Z.expand, B.Z.expand)
 #                  J.Z <- J.Z[order(J.mat.original$student, J.mat.original$year), 
 #                    ]
 #                  colnames(J.Z) <- interleave(colnames(Z), colnames(B.Z))
@@ -1532,15 +1532,15 @@ for (p in unique(J.mat$pat)) {
     #Henderson mixed model equations produce standard errors for
     #fixed effects and EBLUPs
     c.temp <- crossprod(J.X, R.full.inv) %*% J.Z
-    c.1 <- rBind(crossprod(J.X, R.full.inv) %*% J.X, t(c.temp))
+    c.1 <- rbind(crossprod(J.X, R.full.inv) %*% J.X, t(c.temp))
     G.inv <- chol2inv(chol(G))
-    c.2 <- rBind(c.temp, H.eta(G.inv, J.Z, R.full.inv))
-    C_inv <- cBind(c.1, c.2)
+    c.2 <- rbind(c.temp, H.eta(G.inv, J.Z, R.full.inv))
+    C_inv <- cbind(c.1, c.2)
     C <- solve(C_inv)
     eblup_stderror <- sqrt(diag(C)[-c(1:n_ybeta)])
     ybetas_stderror <- sqrt(diag(C)[1:n_ybeta])
     rm(C, C_inv, c.2, c.1, c.temp)
-    eblup <- as.matrix(cBind(eta.hat, eblup_stderror))
+    eblup <- as.matrix(cbind(eta.hat, eblup_stderror))
     eblup <- as.data.frame(eblup)
     eblup <- as.data.frame(cbind(colnames(J.Z), eblup))
     #remainder of the code is just formatting to return to user
@@ -1582,14 +1582,14 @@ for (p in unique(J.mat$pat)) {
     constant.element <- which(effect_la == paste("error covariance", ":[", nyear.pseudo, 
         ",", nyear.pseudo, "]", sep = ""))
     if (control$hessian == TRUE) {
-        parameters <- round(cBind(append(c(ybetas, thetas), 1, after = constant.element - 
+        parameters <- round(cbind(append(c(ybetas, thetas), 1, after = constant.element - 
             1), append(c(ybetas_stderror, std_errors), NA, after = constant.element - 
             1)), 4)
         colnames(parameters) <- c("Estimate", "Standard Error")
         rownames(parameters) <- as.character(effect_la)
     }
     if (control$hessian == FALSE) {
-        parameters <- round(cBind(append(c(ybetas, thetas), 1, after = constant.element - 
+        parameters <- round(cbind(append(c(ybetas, thetas), 1, after = constant.element - 
             1), c(ybetas_stderror, rep(NA, length(thetas) + 1))), 4)
         colnames(parameters) <- c("Estimate", "Standard Error")
         rownames(parameters) <- as.character(effect_la)
