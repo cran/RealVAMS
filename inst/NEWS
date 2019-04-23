@@ -1,5 +1,7 @@
-Version 0.4-1: 2018-04-20
-	- Internal changes to accommodate changes in Matrix package
+Version 0.4-3: 2019-04-22
+	- Added the joint covariance matrix, C, of the estimated fixed effects and
+		predicted random effects to the output. See Henderson (1975).
+	- Paper reference added to manuals and to CITATION file.
 
 Version 0.4-0: 2017-08-13
         - New arguments added to the RealVAMS function

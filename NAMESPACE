@@ -1,7 +1,6 @@
 useDynLib(RealVAMS,.registration=TRUE)
 export(RealVAMS)
 
-
 # Imported functions
 import(Matrix)
 importFrom("numDeriv","jacobian")

@@ -5,7 +5,7 @@
 Multivariate VAM Fitting
 }
 \description{
-Fits a multivariate value-added model (VAM), see Broatch and Lohr (2012) \cr <doi:10.3102/1076998610396900>, with normally distributed test scores and a binary outcome indicator. A pseudo-likelihood approach, Wolfinger and O'Connell (1993) \cr <doi:10.1080/00949659308811554>, is used for the estimation of this joint generalized linear mixed model.  The inner loop of the pseudo-likelihood routine (estimation of a linear mixed model) occurs in the framework of the EM algorithm presented by \cr Karl, Yang, and Lohr (2013) <DOI:10.1016/j.csda.2012.10.004>. This material is based upon work supported by the National Science Foundation under grants DRL-1336027 and DRL-1336265.  
+Fits a multivariate value-added model (VAM), see Broatch, Green, and Karl (2018) \cr <doi:10.32614/RJ-2018-033>, and Broatch and Lohr (2012) \cr <doi:10.3102/1076998610396900>, with normally distributed test scores and a binary outcome indicator. A pseudo-likelihood approach, Wolfinger and O'Connell (1993) \cr <doi:10.1080/00949659308811554>, is used for the estimation of this joint generalized linear mixed model.  The inner loop of the pseudo-likelihood routine (estimation of a linear mixed model) occurs in the framework of the EM algorithm presented by \cr Karl, Yang, and Lohr (2013) <DOI:10.1016/j.csda.2012.10.004>. This material is based upon work supported by the National Science Foundation under grants DRL-1336027 and DRL-1336265.  
 }
 \usage{
 RealVAMS(score.data, outcome.data, persistence = "CP",school.effects = FALSE, 
@@ -127,6 +127,7 @@ the original response can be obtained from \cr\code{joined.table$y.combined.orig
 \item{X}{the fixed effects design matrix of the interleaved score and outcome responses}
 \item{Z}{the random effects design matrix of the interleaved score and outcome responses}
 \item{G}{the random effects covariance matrix. This matrix is block diagonal and contains the teacher variance components and, if included, school-level variance components.}
+\item{C}{the joint covariance matrix of the fixed effect estimates and the predicted random effects, that is, for c(fixed.effects,eblup[,1]). See Henderson (1975) for details. This can be used to estimate the variance of an estimable/predictable function.}
 \item{R}{the error covariance matrix, with the variance of the outcome pseudo-responses restricted to 1. See the description for \code{R.full}. In most cases, \code{R.full} should be used instead of \code{R} when analyzing the results of \bold{RealVAMS}.}
 \item{R.full}{the error covariance matrix, which is formed as the product \cr
 \code{diag(sqrt.w)\%*\%R\%*\%diag(sqrt.w)}. The matrix R assumes a variance of 1 for all of the binomial responses, while R.full includes the variance from the binomial distribution (in Wolfinger (1993), diag(sqrt.w) is called R_{mu}).}
@@ -139,11 +140,15 @@ the original response can be obtained from \cr\code{joined.table$y.combined.orig
 \references{
 Broatch, J. and Lohr, S. (2012) <DOI:10.3102/1076998610396900> Multidimensional Assessment of Value Added by Teachers to Real-World Outcomes. \emph{Journal of Educational and Behavioral Statistics} \bold{37}, 256--277.
 
+Broatch, J., Green, J., Karl, A. (2018) <DOI:10.32614/RJ-2018-033> RealVAMS: An R Package for Fitting a Multivariate Value-added Model (VAM). \emph{The R Journal} 10/1, 22--30.
+
 Karl, A., Yang, Y. and Lohr, S. (2013) <DOI:10.1016/j.csda.2012.10.004> Efficient Maximum Likelihood Estimation of Multiple Membership Linear Mixed Models, with an Application to Educational Value-Added Assessments. \emph{Computational Statistics & Data Analysis} \bold{59}, 13--27.  
 
 Karl, A., Yang, Y. and Lohr, S. (2013) <DOI:10.3102/1076998613494819> A Correlated Random Effects Model for Nonignorable Missing Data in Value-Added Assessment of Teacher Effects. \emph{Journal of Educational and Behavioral Statistics} \bold{38}, 577--603.
 
 Karl, A., Yang, Y. and Lohr, S. (2014) <DOI:10.1016/j.csda.2013.11.019> Computation of Maximum Likelihood Estimates for Multiresponse Generalized Linear Mixed Models with Non-nested, Correlated Random Effects. \emph{Computational Statistics & Data Analysis} \bold{73}, 146--162.
+
+Henderson, C.R. (1975) Best linear unbiased estimation and prediction under a selection model. \emph{Biometrics} \bold{31(2)}, 423-447.
 
 Lockwood, J., McCaffrey, D., Mariano, L., Setodji, C. (2007) <DOI:10.3102/1076998606298039> Bayesian Methods for Scalable Multivariate Value-Added Assessment. \emph{Journal of Educational and Behavioral Statistics} \bold{32}, 125--150.
 
