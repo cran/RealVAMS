@@ -23,20 +23,19 @@ RealVAMS <- function(score.data, outcome.data, persistence = "CP", school.effect
     if(independent.responses) control$hessian <- FALSE
     Z_mat <- Z_mat[order(Z_mat$year, Z_mat$teacher), ]
     max.PQL.it <- control$max.PQL.it
-    if (class(try(na.fail(Z_mat[, !(names(Z_mat) %in% c("teacher", "y"))]), silent = TRUE)) == 
-        "try-error") {
+    if (inherits(try(na.fail(Z_mat[, !(names(Z_mat) %in% c("teacher", "y"))]), silent = TRUE),
+        "try-error")) {
         cat("*Error: NA values present.\n*NA values are allowed for the 'teacher; and 'y' variables, but no others.\n*
             Please remove these observations from your data frame.\n")
         flush.console()
         return(0)
     }
-    if (identical(sort(unique(outcome.data$r)), c(0, 1)) | class(outcome.data$r) != 
-        "integer") {
+    if (identical(sort(unique(outcome.data$r)), c(0, 1)) | !inherits(outcome.data$r, "integer")) {
         cat("*Error: outcome.data$r should be a numeric column of 0's and 1's, with 1 representing the positive class")
         flush.console()
         return(0)
     }
-    if (class("student.side") != "character" | class("persistence") != "character") {
+    if (!inherits("student.side","character")|!inherits("persistence","character")) {
         cat("*Error: student.side and persistence must be characters (using quotation marks)")
         flush.console()
         return(0)

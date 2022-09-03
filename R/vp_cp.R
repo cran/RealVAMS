@@ -608,7 +608,7 @@ vp_cp <- function(Z_mat, B.mat, control) {
     P[[i]] <- list()
     for (j in 1:i) {
       P[[i]][[j]] <- as(sparseMatrix(i = dP[[i]][[j]][, 1], j = dP[[i]][[j]][, 
-                                                                             2], dims = c(nrow(Z_mat), nteach_effects)), "dgCMatrix")
+                                                                             2], dims = c(nrow(Z_mat), nteach_effects)), "dMatrix")
       if (control$school.effects) 
         P[[i]][[j]] <- cbind(P[[i]][[j]], Matrix(0, nrow(Z_mat), nschool_effects))
     }

@@ -11,8 +11,8 @@ Fits a multivariate value-added model (VAM), see Broatch, Green, and Karl (2018)
 \tabular{ll}{
 Package: \tab RealVAMS\cr
 Type: \tab Package\cr
-Version: \tab 0.4-3\cr
-Date: \tab 2019-04-22\cr
+Version: \tab 0.4-4\cr
+Date: \tab 2022-09-03\cr
 License: \tab GPL-2\cr
 }
 }
