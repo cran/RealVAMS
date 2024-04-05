@@ -1,8 +1,8 @@
 Package: RealVAMS
 Type: Package
 Title: Multivariate VAM Fitting
-Version: 0.4-5
-Date: 2023-01-06
+Version: 0.4-6
+Date: 2024-04-05
 Authors@R: 
     c(person(given = c("Andrew"),
              family = "Karl",
@@ -26,10 +26,10 @@ LazyData: yes
 ByteCompile: yes
 NeedsCompilation: yes
 LinkingTo: Rcpp, RcppArmadillo
-Packaged: 2023-01-07 03:08:33 UTC; andre
+Packaged: 2024-04-05 08:12:50 UTC; andre
 Author: Andrew Karl [cre, aut] (<https://orcid.org/0000-0002-5933-8706>),
   Jennifer Broatch [aut],
   Jennifer Green [aut]
 Maintainer: Andrew Karl <akarl@asu.edu>
 Repository: CRAN
-Date/Publication: 2023-01-07 03:40:06 UTC
+Date/Publication: 2024-04-05 09:13:06 UTC
